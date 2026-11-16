@@ -2,7 +2,11 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    `maven-publish`
 }
+
+group = "com.github.Pobiwan007"
+version = "1.0.0"
 
 android {
     namespace = "com.calendar"
@@ -28,6 +32,12 @@ android {
         jvmTarget = "17"
     }
 
+    publishing {
+        singleVariant("release") {
+            withSourcesJar()
+        }
+    }
+
     buildFeatures {
         compose = true
     }
@@ -41,4 +51,13 @@ dependencies {
     debugImplementation(libs.compose.ui.tooling)
 
     testImplementation(libs.junit)
+}
+
+publishing {
+    publications {
+        register<MavenPublication>("release") {
+            artifactId = "customComposeCalendar"
+            afterEvaluate { from(components["release"]) }
+        }
+    }
 }
